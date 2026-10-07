@@ -22,7 +22,9 @@ npm run build      # static build into dist/
 | 2 Engines | `src/engines` | trauma, ndis, school, narrative |
 | 3 Workflows | `src/workflows` | one linear runner per domain |
 | 4 Front-end | `src/frontend` | React shell: dashboard, tools, preview modal |
-| 5 PDF | `src/pdf` | library-free single-page PDF generators |
+| 5 PDF | `src/pdf` | library-free PDF generators that wrap and paginate |
+| Data | `src/data`, `src/access` | saved drafts and plan choice in the browser, what each plan unlocks |
+| AI | `src/ai`, `functions/api/ai.ts` | AI drafting request, browser client, and the Pages Function that calls Claude |
 | 6 Deployment | `deployment` | Cloudflare Worker, Pages, GitHub Actions, env schema, versioning |
 | 7 Monetization | `monetization` | subscriptions, licensing, marketplace, billing, tiers (mock) |
 | 8 Scale | `scale` | multi-seat, enterprise, audit, offline, performance |
@@ -41,4 +43,4 @@ npm run build      # static build into dist/
 
 ## Status
 
-Version 0.2.0. Billing is a mock ledger. Every workflow, in the shell and through the API, refuses to run until the redacted preview is approved. All stores are in memory. See `integration/checklist/productionChecklist.ts` for the readiness list.
+Version 0.3.0. Every workflow refuses to run until the redacted preview is approved. Drafts save in the browser without the original note. AI drafting with Claude is optional, needs a confirmed second preview, and is switched on by setting the `AI_API_KEY` secret on the Pages project. Plans are a demo gate in the browser; billing is a mock ledger. See `integration/checklist/productionChecklist.ts` for the readiness list.

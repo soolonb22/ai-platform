@@ -1,6 +1,6 @@
 # Release strategy
 
-This build is `0.2.0`. Billing is mock. Every workflow requires explicit approval of the redacted preview. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
+This build is `0.3.0`. Billing is mock. Every workflow requires explicit approval of the redacted preview. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
 
 ## Pre-launch checklist
 
@@ -10,6 +10,7 @@ This build is `0.2.0`. Billing is mock. Every workflow requires explicit approva
 - `wrangler.toml`, `.github/workflows/deploy.yml`, and `typecheck`, `test`, and `build` scripts exist. `tsc` covers every phase.
 - Settings and the release manifest read `APP_VERSION` and `version.json`. Keep the two values equal.
 - No account store. Do not promise signup.
+- AI drafting is paid from the site key and plan limits run in the browser only. Set a monthly spend limit in the Anthropic Console before setting `AI_API_KEY`. `AI_MODE=off` turns it off without a redeploy of code.
 - Pages has no binding to the Worker. Add one before the shell calls `/ai`.
 
 ## Beta rollout plan

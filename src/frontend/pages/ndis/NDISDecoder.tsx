@@ -8,11 +8,11 @@
 import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
+import { ToolActions } from "../../components/ToolActions";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runNDISWorkflow, type NDISWorkflowResult } from "../../../workflows/ndis/ndisWorkflow";
-import { buildServiceAgreementPDF } from "../../../pdf/serviceAgreement";
-import { agreementFrom } from "../../../pdf/mapResults";
+
 import { PlatformError } from "../../../utils/errors";
 
 export function NDISDecoder() {
@@ -51,16 +51,6 @@ export function NDISDecoder() {
     }
   }
 
-  function download() {
-    if (!result) return;
-    const bytes = buildServiceAgreementPDF(agreementFrom(result));
-    const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "service-agreement.pdf";
-    link.click();
-    URL.revokeObjectURL(url);
-  }
 
   return (
     <section className="page">
@@ -71,21 +61,18 @@ export function NDISDecoder() {
       <button type="button" className="primary" onClick={run}>
         Run NDIS Workflow
       </button>
-      {result ? (
-        <button type="button" onClick={download}>
-          Download PDF
-        </button>
-      ) : null}
+
       {error ? <p className="hint">{error}</p> : null}
       {preview ? (
         <PreviewModal originalText={text} redactedText={preview} onApprove={approve} onCancel={() => setPreview("")} />
       ) : null}
       {result ? <NDISResult result={result} /> : null}
+      {result ? <ToolActions kind="ndis" result={result} /> : null}
     </section>
   );
 }
 
-function NDISResult({ result }: { result: NDISWorkflowResult }) {
+export function NDISResult({ result }: { result: NDISWorkflowResult }) {
   return (
     <div className="page">
       <section>

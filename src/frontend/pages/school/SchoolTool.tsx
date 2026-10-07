@@ -6,11 +6,11 @@
 
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
+import { ToolActions } from "../../components/ToolActions";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runSchoolWorkflow, type SchoolWorkflowResult } from "../../../workflows/school/schoolWorkflow";
-import { buildSchoolCommunicationPDF } from "../../../pdf/schoolCommunication";
-import { schoolFrom } from "../../../pdf/mapResults";
+
 import { PlatformError } from "../../../utils/errors";
 
 export function SchoolTool() {
@@ -39,16 +39,6 @@ export function SchoolTool() {
     }
   }
 
-  function download() {
-    if (!result) return;
-    const bytes = buildSchoolCommunicationPDF(schoolFrom(result));
-    const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "school-note.pdf";
-    link.click();
-    URL.revokeObjectURL(url);
-  }
 
   return (
     <section className="page">
@@ -57,21 +47,18 @@ export function SchoolTool() {
       <button type="button" className="primary" onClick={run}>
         Run School Workflow
       </button>
-      {result ? (
-        <button type="button" onClick={download}>
-          Download PDF
-        </button>
-      ) : null}
+
       {error ? <p className="hint">{error}</p> : null}
       {preview ? (
         <PreviewModal originalText={text} redactedText={preview} onApprove={approve} onCancel={() => setPreview("")} />
       ) : null}
       {result ? <SchoolResult result={result} /> : null}
+      {result ? <ToolActions kind="school" result={result} /> : null}
     </section>
   );
 }
 
-function SchoolResult({ result }: { result: SchoolWorkflowResult }) {
+export function SchoolResult({ result }: { result: SchoolWorkflowResult }) {
   return (
     <div className="page">
       <section>

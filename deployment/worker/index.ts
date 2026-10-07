@@ -17,7 +17,7 @@ export default {
     if (!handler) return Response.json({ error: "Not found." }, { status: 404 });
     try {
       if (env.ENVIRONMENT === "off") return Response.json({ error: "Worker is off." }, { status: 503 });
-      return await handler(request);
+      return await handler(request, env);
     } catch (error) {
       console.log(toSafeLog(error));
       const message = error instanceof PlatformError ? error.message : "Something went wrong.";

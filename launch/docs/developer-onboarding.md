@@ -33,7 +33,11 @@ ai-platform/
     workflows/      Phase 3  trauma, ndis, school, provider
     frontend/       Phase 4  React shell: pages, components, styles
     pdf/            Phase 5  writePdf plus four generators and mapResults
+    data/           Saved drafts and plan choice, in this browser only
+    access/         What each plan unlocks
+    ai/             AI drafting request shape and browser client
     version.ts
+  functions/        Cloudflare Pages Function for POST /api/ai
   deployment/       Phase 6  worker, pages, github, env, build
   monetization/     Phase 7  subscriptions, licensing, marketplace, billing, tiers
   scale/            Phase 8  multiseat, enterprise, audit, offline, performance
@@ -196,5 +200,11 @@ CI runs the same three on every push to `main`.
 - Clarity — every output says what it is not
 - Extensibility — pure functions in, structured results out
 - Safety — mock billing, in-memory stores, fixed error messages
+
+## 13. Drafts, AI Drafting, and Plans
+
+- **Drafts** live in `src/data/drafts.ts` and use browser storage through `src/data/store.ts`. `saveDraft` removes the original note before anything is written.
+- **AI drafting** starts in `src/frontend/components/AiDraft.tsx`. It shows exactly what will leave the device, then `src/ai/client.ts` posts to `/api/ai`. `functions/api/ai.ts` hands the request to `deployment/worker/aiHandler.ts`, which checks the origin, size, and kill switch, runs the worker redaction pass again, and calls Claude through `claudeDrafter.ts`. Prompts are in `aiPrompts.ts`.
+- **Plans** are defined in `src/access/plans.ts` and chosen in Settings. They gate AI drafts per day and the number of saved drafts. They run in the browser and are not payment.
 
 Welcome to the system. You're extending an OS, not just writing code.

@@ -8,4 +8,10 @@ Pages routing is `deployment/pages/_routes.json`. `/api/*`, `/redact`, `/ai`, an
 
 `deployment/github/deploy.yml` is the source copy of the pipeline and `.github/workflows/deploy.yml` is the live one. Keep them identical. On a push to `main` it installs, typechecks, builds, tests, then deploys the Worker and Pages with Wrangler. Tokens are GitHub secret names only: set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the repository secrets.
 
-Still open: Pages does not forward `/redact`, `/ai`, or `/pdf` to the Worker. Add a service binding or a custom route before the shell calls the Worker. Until then the shell runs every workflow in the browser.
+AI drafting runs as a Pages Function, `functions/api/ai.ts`, at `/api/ai` on the same site, so no separate Worker or binding is needed. `wrangler pages deploy dist` picks up the `functions` folder automatically. Turn AI on by setting the key as a secret, then redeploy:
+
+```
+npx wrangler pages secret put AI_API_KEY --project-name ai-platform
+```
+
+Optional settings: `AI_MODEL` picks another Claude model, `ALLOWED_ORIGINS` lists extra sites allowed to call the endpoint, and `AI_MODE=off` switches AI off. The standalone Worker routes `/ai` to the same handler.

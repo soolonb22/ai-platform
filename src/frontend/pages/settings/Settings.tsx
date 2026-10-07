@@ -1,12 +1,20 @@
 /**
  * Settings.tsx
- * Local page. The toggle stays in component state. Nothing is sent.
+ * Privacy notes, the demo plan picker, saved drafts, and the version.
+ * Everything here is stored on this device only.
  */
 
 import { useState } from "react";
+import { PLANS } from "../../../access/plans";
+import { clearDrafts, listDrafts } from "../../../data/drafts";
+import { aiDraftsUsedToday, getPlan, setPlan } from "../../../data/plan";
 import { APP_VERSION } from "../../../version";
+import { useStoreVersion } from "../../state/useStore";
 
 export function Settings() {
+  useStoreVersion();
+  const plan = getPlan();
+  const saved = listDrafts().length;
   const [advanced, setAdvanced] = useState(false);
 
   return (
@@ -15,9 +23,46 @@ export function Settings() {
       <section>
         <h2>Privacy</h2>
         <p>
-          Text is redacted on this device before a workflow runs. The original stays in the preview.
-          Workflows use the redacted text. This page does not store notes.
+          Text is redacted on this device before any workflow runs, and nothing runs until you approve the preview. The four
+          tools work entirely in this browser.
         </p>
+        <p>
+          Saved drafts keep only the redacted text and results, in this browser. The original note is never stored. AI
+          drafting sends the redacted text to Claude, an AI model by Anthropic, only after you see it and choose Send to AI.
+        </p>
+      </section>
+      <section>
+        <h2>Plan</h2>
+        <p className="hint">Demo plans. No payment is taken and no account is created. Your choice is saved on this device.</p>
+        {PLANS.map((item) => (
+          <label key={item.id} className="field row">
+            <input type="radio" name="plan" checked={plan.id === item.id} onChange={() => setPlan(item.id)} />
+            <span>
+              <strong>{item.label}</strong> {item.price}.{" "}
+              {item.aiDraftsPerDay ? `${item.aiDraftsPerDay} AI drafts a day` : "No AI drafts"}, {item.savedDrafts} saved
+              drafts.
+            </span>
+          </label>
+        ))}
+        <p className="hint">
+          AI drafts used today: {aiDraftsUsedToday()} of {plan.aiDraftsPerDay}.
+        </p>
+      </section>
+      <section>
+        <h2>Saved drafts</h2>
+        <p>
+          {saved} of {plan.savedDrafts} saved on this device.
+        </p>
+        <button
+          type="button"
+          className="ghost"
+          disabled={saved === 0}
+          onClick={() => {
+            if (window.confirm("Delete every saved draft on this device? This cannot be undone.")) clearDrafts();
+          }}
+        >
+          Delete all drafts
+        </button>
       </section>
       <section>
         <h2>Workflows</h2>
@@ -31,7 +76,7 @@ export function Settings() {
       </section>
       <section>
         <h2>Version</h2>
-        <p>Phase 4 shell. Version {APP_VERSION}.</p>
+        <p>Version {APP_VERSION}.</p>
       </section>
       <label className="field row">
         <input type="checkbox" checked={advanced} onChange={(event) => setAdvanced(event.target.checked)} />

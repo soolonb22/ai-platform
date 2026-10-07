@@ -18,3 +18,7 @@ Licences:
 Marketplace products: Progress Note Generator $40, Sensory Profile Mapper $35, Trauma Pattern Decoder $50.
 
 `createSubscription`, `issueLicense`, and `purchaseProduct` call the mock provider. Records are in memory and clear when the process ends.
+
+## Plans in the app
+
+`src/access/plans.ts` decides what each plan unlocks. Free has all four tools, PDF downloads, and 5 saved drafts. Parent, Coordinator, and Provider add 10, 40, and 100 AI drafts a day and room for 50, 200, and 500 drafts. The choice is made in Settings and saved in the browser. It is a demo gate, not payment. Real enforcement needs accounts, a payment provider, and checks on the server.

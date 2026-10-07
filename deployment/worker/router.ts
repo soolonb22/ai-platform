@@ -1,18 +1,19 @@
 /**
  * router.ts
- * Maps /redact, /ai, and /pdf to local modules. No outbound call.
+ * Maps /redact, /ai, and /pdf for the standalone Worker.
+ * /ai uses the same handler and guards as the Pages Function at /api/ai.
  */
 
 import { redactWorker } from "../../src/privacy/workerRedactor";
-import { mockAI } from "../../src/pipeline/pipeline";
-import { detectPatterns } from "../../src/engines/trauma/patterns";
-import { extractFunding } from "../../src/engines/ndis/fundingExtractor";
 import { buildServiceAgreementPDF, type Agreement } from "../../src/pdf/serviceAgreement";
 import { buildEvidencePackPDF, type EvidencePack } from "../../src/pdf/evidencePack";
 import { buildTraumaPlanPDF, type TraumaPlan } from "../../src/pdf/traumaPlan";
 import { buildSchoolCommunicationPDF, type SchoolCommunication } from "../../src/pdf/schoolCommunication";
+import { handleAiRequest } from "./aiHandler";
+import { claudeDrafter } from "./claudeDrafter";
+import type { Env } from "./env";
 
-export type RouteHandler = (request: Request) => Promise<Response> | Response;
+export type RouteHandler = (request: Request, env: Env) => Promise<Response> | Response;
 
 async function readJson(request: Request): Promise<Record<string, unknown>> {
   const body = await request.json();
@@ -28,19 +29,11 @@ export const routes: Record<string, RouteHandler> = {
     const text = textField(await readJson(request));
     return Response.json({ redacted: redactWorker(text) });
   },
-  "/ai": async (request) => {
-    const body = await readJson(request);
-    const text = textField(body);
-    const engine = typeof body.engine === "string" ? body.engine : "mock";
-    if (engine === "trauma") return Response.json({ engine, result: detectPatterns(text) });
-    if (engine === "ndis") return Response.json({ engine, result: extractFunding(text) });
-    return Response.json({ engine: "mock", result: mockAI(text) });
-  },
+  "/ai": (request, env) => handleAiRequest(request, env, claudeDrafter),
   "/pdf": async (request) => {
     const body = await readJson(request);
     const kind = typeof body.kind === "string" ? body.kind : "";
-    const payload = body.payload;
-    const bytes = pdfBytes(kind, payload);
+    const bytes = pdfBytes(kind, body.payload);
     if (!bytes) return Response.json({ error: "Unknown PDF kind." }, { status: 400 });
     return new Response(bytes, { headers: { "content-type": "application/pdf" } });
   },

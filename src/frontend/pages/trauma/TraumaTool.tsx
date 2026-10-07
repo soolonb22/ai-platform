@@ -6,10 +6,10 @@
 
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
+import { ToolActions } from "../../components/ToolActions";
 import { previewFor } from "../../../privacy/fence";
 import { runTraumaWorkflow, type TraumaWorkflowResult } from "../../../workflows/trauma/traumaWorkflow";
-import { buildTraumaPlanPDF } from "../../../pdf/traumaPlan";
-import { traumaPlanFrom } from "../../../pdf/mapResults";
+
 import { PlatformError } from "../../../utils/errors";
 
 export function TraumaTool() {
@@ -38,16 +38,6 @@ export function TraumaTool() {
     }
   }
 
-  function download() {
-    if (!result) return;
-    const bytes = buildTraumaPlanPDF(traumaPlanFrom(result));
-    const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "trauma-plan.pdf";
-    link.click();
-    URL.revokeObjectURL(url);
-  }
 
   return (
     <section className="page">
@@ -64,21 +54,18 @@ export function TraumaTool() {
       <button type="button" className="primary" onClick={run}>
         Run Trauma Workflow
       </button>
-      {result ? (
-        <button type="button" onClick={download}>
-          Download PDF
-        </button>
-      ) : null}
+
       {error ? <p className="hint">{error}</p> : null}
       {preview ? (
         <PreviewModal originalText={text} redactedText={preview} onApprove={approve} onCancel={() => setPreview("")} />
       ) : null}
       {result ? <TraumaResult result={result} /> : null}
+      {result ? <ToolActions kind="trauma" result={result} /> : null}
     </section>
   );
 }
 
-function TraumaResult({ result }: { result: TraumaWorkflowResult }) {
+export function TraumaResult({ result }: { result: TraumaWorkflowResult }) {
   return (
     <div className="page">
       <section>

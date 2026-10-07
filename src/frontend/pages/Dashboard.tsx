@@ -4,19 +4,21 @@
  */
 
 import { useState } from "react";
+import { Drafts } from "./drafts/Drafts";
 import { EvidenceTool } from "./evidence/EvidenceTool";
 import { NDISDecoder } from "./ndis/NDISDecoder";
 import { SchoolTool } from "./school/SchoolTool";
 import { Settings } from "./settings/Settings";
 import { TraumaTool } from "./trauma/TraumaTool";
 
-export type ToolId = "trauma" | "ndis" | "school" | "evidence" | "settings";
+export type ToolId = "trauma" | "ndis" | "school" | "evidence" | "drafts" | "settings";
 
 const TOOLS: Array<{ id: ToolId; label: string }> = [
   { id: "trauma", label: "Trauma Tool" },
   { id: "ndis", label: "NDIS Decoder" },
   { id: "school", label: "School Tools" },
   { id: "evidence", label: "Evidence Tools" },
+  { id: "drafts", label: "Drafts" },
   { id: "settings", label: "Settings" },
 ];
 
@@ -44,6 +46,7 @@ export function Dashboard({ initialTool = "trauma" }: { initialTool?: ToolId }) 
         {tool === "ndis" ? <NDISDecoder /> : null}
         {tool === "school" ? <SchoolTool /> : null}
         {tool === "evidence" ? <EvidenceTool /> : null}
+        {tool === "drafts" ? <Drafts /> : null}
         {tool === "settings" ? <Settings /> : null}
       </main>
     </div>

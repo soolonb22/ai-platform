@@ -10,4 +10,16 @@ The preview modal can show both texts. Approve and cancel are callbacks. The ori
 
 Official NDIS terms such as "Improved Daily Living" and "Support Coordination" are shielded before the rules run, so plan language survives. Capitalised runs made only of everyday words, such as "Mental Health" or "Student Support Officer", are left alone.
 
+## AI drafting
+
+AI drafting is optional and is not part of the Free plan. Before anything is sent, the panel shows exactly the worker-redacted text and the short findings that will leave the device, with two choices: Send to AI, or Keep it on this device. The original note is never sent.
+
+The server at `/api/ai` refuses requests from other sites, runs the worker redaction pass again, and never logs the text. The draft is written by Claude, an AI model by Anthropic.
+
+## Saved drafts
+
+Drafts live in this browser's local storage. They keep the redacted text, the results, and any AI draft. The original note is removed before saving. Delete drafts one at a time on the Drafts page, or all at once in Settings.
+
+## Known gaps
+
 Known gaps: a name with no title, label, verb, or action word near it can still pass. A capitalised common word before an action word, such as "Sleep was poor", can be over-redacted. The preview shows both. Do not treat the fence as complete.

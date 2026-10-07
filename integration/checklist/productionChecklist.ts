@@ -45,7 +45,25 @@ const ITEMS: ChecklistItem[] = [
     section: "Deployment pipeline health",
     item: "Worker, Pages, and Actions files exist",
     status: "partial",
-    note: "wrangler.toml, .github/workflows/deploy.yml, and typecheck, test, and build scripts exist. Pages has no binding to the Worker yet.",
+    note: "Pages serves the app and the /api/ai function from one site. CI typechecks, tests, and builds; its deploy steps need the Cloudflare secrets in GitHub.",
+  },
+  {
+    section: "AI drafting",
+    item: "Redacted text to a Claude draft, after a second preview",
+    status: "partial",
+    note: "Origin check, size limits, kill switch, and server re-redaction are in place. Needs AI_API_KEY. No per-user limit on the server yet.",
+  },
+  {
+    section: "Saved drafts",
+    item: "Drafts kept in the browser without the original note",
+    status: "ready",
+    note: "Plan limits apply. Delete one or all at any time. Nothing is uploaded.",
+  },
+  {
+    section: "Plan checks",
+    item: "Tools check the plan before AI drafting and saving",
+    status: "partial",
+    note: "Browser-only demo gate. No accounts, no payment, no server enforcement.",
   },
   {
     section: "Billing system readiness",

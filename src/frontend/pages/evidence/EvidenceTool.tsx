@@ -8,11 +8,11 @@
 import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
+import { ToolActions } from "../../components/ToolActions";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runProviderWorkflow, type ProviderWorkflowResult } from "../../../workflows/provider/providerWorkflow";
-import { buildEvidencePackPDF } from "../../../pdf/evidencePack";
-import { evidenceFrom } from "../../../pdf/mapResults";
+
 import { PlatformError } from "../../../utils/errors";
 
 export function EvidenceTool() {
@@ -51,16 +51,6 @@ export function EvidenceTool() {
     }
   }
 
-  function download() {
-    if (!result) return;
-    const bytes = buildEvidencePackPDF(evidenceFrom(result));
-    const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "evidence-pack.pdf";
-    link.click();
-    URL.revokeObjectURL(url);
-  }
 
   return (
     <section className="page">
@@ -71,21 +61,18 @@ export function EvidenceTool() {
       <button type="button" className="primary" onClick={run}>
         Run Provider Workflow
       </button>
-      {result ? (
-        <button type="button" onClick={download}>
-          Download PDF
-        </button>
-      ) : null}
+
       {error ? <p className="hint">{error}</p> : null}
       {preview ? (
         <PreviewModal originalText={text} redactedText={preview} onApprove={approve} onCancel={() => setPreview("")} />
       ) : null}
       {result ? <EvidenceResult result={result} /> : null}
+      {result ? <ToolActions kind="provider" result={result} /> : null}
     </section>
   );
 }
 
-function EvidenceResult({ result }: { result: ProviderWorkflowResult }) {
+export function EvidenceResult({ result }: { result: ProviderWorkflowResult }) {
   return (
     <div className="page">
       <section>
