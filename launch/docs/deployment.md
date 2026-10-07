@@ -6,7 +6,7 @@ The Worker entry is `deployment/worker/index.ts`. It accepts POST only and route
 
 Pages routing is `deployment/pages/_routes.json`. `/api/*`, `/redact`, `/ai`, and `/pdf` are included so they are not served as static files. The shell paths are excluded. `pages.config.json` builds with `npm run build` into `dist`.
 
-`deployment/github/deploy.yml` is the source copy of the pipeline and `.github/workflows/deploy.yml` is the live one. Keep them identical. On a push to `main` it installs, typechecks, builds, tests, then deploys the Worker and Pages with Wrangler. Tokens are GitHub secret names only: set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the repository secrets.
+`deployment/github/deploy.yml` is the source copy of the pipeline and `.github/workflows/deploy.yml` is the live one. Keep them identical. On a push to `main` it installs, typechecks, builds, and tests. If `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are set in the repository secrets, it then deploys Pages, which includes the `/api/ai` function. Without them the run still passes and skips the deploy. The standalone Worker is not deployed by CI.
 
 AI drafting runs as a Pages Function, `functions/api/ai.ts`, at `/api/ai` on the same site, so no separate Worker or binding is needed. `wrangler pages deploy dist` picks up the `functions` folder automatically. Turn AI on by setting the key as a secret, then redeploy:
 

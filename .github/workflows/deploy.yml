@@ -7,6 +7,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      # True only when both Cloudflare secrets are set in the repository settings.
+      CLOUDFLARE_CONFIGURED: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -14,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         run: npm ci
@@ -28,16 +31,16 @@ jobs:
       - name: Tests
         run: npm test
 
-      - name: Deploy Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --config deployment/worker/wrangler.toml
-
+      # The site and its /api/ai function both deploy with Pages.
+      # The standalone Worker in deployment/worker is optional and is not deployed here.
       - name: Deploy Pages
+        if: env.CLOUDFLARE_CONFIGURED == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=ai-platform
+          command: pages deploy dist --project-name=ai-platform --branch=main
+
+      - name: Deploy skipped
+        if: env.CLOUDFLARE_CONFIGURED != 'true'
+        run: echo "::notice::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set, so this run checked the code and skipped the deploy."
