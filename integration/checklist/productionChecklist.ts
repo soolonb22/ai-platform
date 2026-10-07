@@ -15,13 +15,13 @@ const ITEMS: ChecklistItem[] = [
     section: "Privacy compliance",
     item: "Local and worker redaction run before engines",
     status: "partial",
-    note: "Workflows redact first. The shell gates on a real Approve click. The API runners still simulate approval. Bare names can pass.",
+    note: "Workflows redact first through runFence. Every path, shell and API, refuses to run without explicit approval.",
   },
   {
     section: "Redaction verification",
     item: "Sample notes do not reach the engine unchanged",
     status: "partial",
-    note: "Email, phone, labeled ids, dates, addresses, schools, providers, and labeled names are replaced. A bare name with no label can pass.",
+    note: "NDIS terms are kept. Email, phone, ids, dates, addresses, schools, providers, and names near a title, label, verb, or action word are replaced. A name with none of those can pass.",
   },
   {
     section: "Workflow stability",
@@ -33,7 +33,7 @@ const ITEMS: ChecklistItem[] = [
     section: "PDF generation stability",
     item: "Four generators return a PDF buffer",
     status: "ready",
-    note: "Headers are valid and /Length matches the stream. Single page, 40 lines max.",
+    note: "Headers are valid, every /Length and xref offset is exact, long lines wrap, and long documents paginate.",
   },
   {
     section: "Type safety",

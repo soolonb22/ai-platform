@@ -1,6 +1,6 @@
 # Workflows
 
-Each workflow redacts, builds a preview, then runs engines on the worker text only. Approval is simulated in this build.
+Each workflow redacts, builds a preview, and waits for approval. It then runs engines on the worker text only. A missing or false approval flag stops it with "Preview was not approved." Engines match cues as whole words, so "white" never counts as "hit".
 
 ## Trauma
 

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
 import { TextInput } from "../../components/TextInput";
-import { redactLocal } from "../../../privacy/localRedactor";
+import { previewFor } from "../../../privacy/fence";
 import { runNDISWorkflow, type NDISWorkflowResult } from "../../../workflows/ndis/ndisWorkflow";
 import { buildServiceAgreementPDF } from "../../../pdf/serviceAgreement";
 import { agreementFrom } from "../../../pdf/mapResults";
@@ -38,7 +38,7 @@ export function NDISDecoder() {
       setError("No input to process.");
       return;
     }
-    setPreview(redactLocal(text));
+    setPreview(previewFor(text));
   }
 
   function approve() {

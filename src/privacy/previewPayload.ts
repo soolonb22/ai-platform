@@ -1,7 +1,7 @@
 /**
  * previewPayload.ts
  * Builds the object a user reviews before anything leaves the client.
- * No UI. Approval is a flag on the object, set by the caller or by the test helper.
+ * No UI. Approval is a flag on the object. Only runFence sets it, from an explicit caller value.
  */
 
 export type PreviewPayload = {
@@ -22,18 +22,3 @@ export function buildPreview(raw: string, redacted: string): PreviewPayload {
   };
 }
 
-/**
- * Test helper. Returns a new payload with approved set.
- * Default is approve. Pass false to simulate a rejection.
- * Does not mutate the input.
- */
-export function simulateUserApproval(
-  preview: PreviewPayload,
-  approved = true,
-): PreviewPayload {
-  return {
-    original: preview.original,
-    redacted: preview.redacted,
-    approved,
-  };
-}

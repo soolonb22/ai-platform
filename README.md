@@ -41,4 +41,4 @@ npm run build      # static build into dist/
 
 ## Status
 
-Version 0.1.1. Billing is a mock ledger. The API runners simulate approval; the React shell gates on a real Approve click. All stores are in memory. See `integration/checklist/productionChecklist.ts` for the readiness list.
+Version 0.2.0. Billing is a mock ledger. Every workflow, in the shell and through the API, refuses to run until the redacted preview is approved. All stores are in memory. See `integration/checklist/productionChecklist.ts` for the readiness list.

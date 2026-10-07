@@ -5,6 +5,8 @@
 
 export interface ApiRequest {
   input: string;
+  /** Must be true. The caller shows the redacted preview and gets approval first. */
+  approved?: boolean;
 }
 
 export interface ApiSuccess<T> {

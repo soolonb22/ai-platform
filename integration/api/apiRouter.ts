@@ -1,6 +1,7 @@
 /**
  * apiRouter.ts
  * Local routes to the four workflows. No network.
+ * Nothing runs unless the request carries approved: true.
  */
 
 import { runNDISWorkflow } from "../../src/workflows/ndis/ndisWorkflow";
@@ -24,7 +25,7 @@ export function handleRequest(path: string, payload: ApiRequest): ApiResponse<un
   const run = routes[path as ApiPath];
   if (!run) return { ok: false, path, error: "Not found." };
   try {
-    return { ok: true, path, result: run(payload.input) };
+    return { ok: true, path, result: run(payload.input, payload.approved === true) };
   } catch (error) {
     const message = error instanceof PlatformError ? error.message : "Something went wrong.";
     return { ok: false, path, error: message };

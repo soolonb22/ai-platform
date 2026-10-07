@@ -11,16 +11,16 @@ import { saveToCache } from "./offlineCache";
 
 export type OfflineWorkflow = "trauma" | "ndis" | "school" | "provider";
 
-/** Run one local workflow and cache the worker text. */
-export function runOfflineWorkflow(input: string, workflowName: OfflineWorkflow) {
+/** Run one local workflow after approval and cache the worker text. */
+export function runOfflineWorkflow(input: string, workflowName: OfflineWorkflow, approved: boolean) {
   const result =
     workflowName === "trauma"
-      ? runTraumaWorkflow(input)
+      ? runTraumaWorkflow(input, approved)
       : workflowName === "ndis"
-        ? runNDISWorkflow(input)
+        ? runNDISWorkflow(input, approved)
         : workflowName === "school"
-          ? runSchoolWorkflow(input)
-          : runProviderWorkflow(input);
+          ? runSchoolWorkflow(input, approved)
+          : runProviderWorkflow(input, approved);
   saveToCache(`${workflowName}:worker`, result.workerText);
   return result;
 }

@@ -38,7 +38,7 @@ export function Settings() {
         <span>Show advanced options</span>
       </label>
       {advanced ? (
-        <p className="hint">Token budget 400. Approval in the workflows is still simulated.</p>
+        <p className="hint">Token budget 400. Every workflow waits for your approval of the redacted preview.</p>
       ) : null}
     </section>
   );

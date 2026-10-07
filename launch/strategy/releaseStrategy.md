@@ -1,12 +1,12 @@
 # Release strategy
 
-This build is `0.1.1`. Billing is mock. Approval in the API runners is simulated; the shell gates on a real Approve click. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
+This build is `0.2.0`. Billing is mock. Every workflow requires explicit approval of the redacted preview. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
 
 ## Pre-launch checklist
 
-- Privacy fence runs before every workflow. Bare names can still pass. Fix that before a public note is accepted.
-- The React shell approves before the worker pass. The API runners still simulate approval. Make `handleRequest` take an approval flag before it is exposed.
-- PDF buffers start with `%PDF-1.4` and `/Length` matches the stream. Single page only.
+- Privacy fence runs before every workflow. A name with no title, label, or action word near it can still pass. Review that before a public note is accepted.
+- Approval is required everywhere. The shell sends it after the Approve click, and `handleRequest` refuses requests without `approved: true`.
+- PDF buffers start with `%PDF-1.4`, every `/Length` and xref offset is exact, and long documents paginate.
 - `wrangler.toml`, `.github/workflows/deploy.yml`, and `typecheck`, `test`, and `build` scripts exist. `tsc` covers every phase.
 - Settings and the release manifest read `APP_VERSION` and `version.json`. Keep the two values equal.
 - No account store. Do not promise signup.

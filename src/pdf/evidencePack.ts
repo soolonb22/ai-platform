@@ -1,6 +1,6 @@
 /**
  * evidencePack.ts
- * Builds a one-page evidence-pack PDF with no library.
+ * Builds an evidence-pack PDF with no library.
  * Planning notes only. Not an assessment.
  * Export: buildEvidencePackPDF(evidence: EvidencePack): Uint8Array
  */
@@ -45,7 +45,7 @@ function linesFor(evidence: EvidencePack): string[] {
   ];
 }
 
-/** Return a single-page PDF. Text past 40 lines is left off the page. */
+/** Return a PDF. Long lines wrap and long documents continue on new pages. */
 export function buildEvidencePackPDF(evidence: EvidencePack): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(evidence));
 }

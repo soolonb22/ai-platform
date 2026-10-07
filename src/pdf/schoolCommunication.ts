@@ -1,6 +1,6 @@
 /**
  * schoolCommunication.ts
- * Builds a one-page school-communication PDF with no library.
+ * Builds a school-communication PDF with no library.
  * Staff note only. Not a behaviour rating.
  * Export: buildSchoolCommunicationPDF(comm: SchoolCommunication): Uint8Array
  */
@@ -38,7 +38,7 @@ function linesFor(comm: SchoolCommunication): string[] {
   ];
 }
 
-/** Return a single-page PDF. Text past 40 lines is left off the page. */
+/** Return a PDF. Long lines wrap and long documents continue on new pages. */
 export function buildSchoolCommunicationPDF(comm: SchoolCommunication): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(comm));
 }

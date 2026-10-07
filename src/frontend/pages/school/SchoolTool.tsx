@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
 import { TextInput } from "../../components/TextInput";
-import { redactLocal } from "../../../privacy/localRedactor";
+import { previewFor } from "../../../privacy/fence";
 import { runSchoolWorkflow, type SchoolWorkflowResult } from "../../../workflows/school/schoolWorkflow";
 import { buildSchoolCommunicationPDF } from "../../../pdf/schoolCommunication";
 import { schoolFrom } from "../../../pdf/mapResults";
@@ -26,7 +26,7 @@ export function SchoolTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(redactLocal(text));
+    setPreview(previewFor(text));
   }
 
   function approve() {

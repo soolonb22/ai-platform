@@ -6,7 +6,7 @@
 
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
-import { redactLocal } from "../../../privacy/localRedactor";
+import { previewFor } from "../../../privacy/fence";
 import { runTraumaWorkflow, type TraumaWorkflowResult } from "../../../workflows/trauma/traumaWorkflow";
 import { buildTraumaPlanPDF } from "../../../pdf/traumaPlan";
 import { traumaPlanFrom } from "../../../pdf/mapResults";
@@ -25,7 +25,7 @@ export function TraumaTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(redactLocal(text));
+    setPreview(previewFor(text));
   }
 
   function approve() {

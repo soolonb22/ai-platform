@@ -9,4 +9,4 @@ To try a workflow locally:
 3. Run the workflow. The runner redacts first, then calls the engine.
 4. Read the draft. It is not a diagnosis and not a funding decision.
 
-The first local call can also be `handleRequest("/trauma", { input })` from `integration/api/apiRouter.ts`. Empty input returns "No input to process."
+The first local call can also be `handleRequest("/trauma", { input, approved: true })` from `integration/api/apiRouter.ts`. Empty input returns "No input to process."

@@ -13,6 +13,7 @@ import { agreementFrom } from "../src/pdf/mapResults";
 import { issueLicense } from "../monetization/licensing/licenseManager";
 import { allocateSeat } from "../scale/multiseat/seatAllocator";
 import { APP_VERSION } from "../src/version";
+import { getVersion } from "../deployment/build/version";
 
 function assert(condition: unknown, message: string): void {
   if (!condition) throw new Error(message);
@@ -56,6 +57,6 @@ assert(length === new TextEncoder().encode(slice).length, "pdf length mismatch")
 issueLicense("school-1", "small-school");
 const seat = allocateSeat("school-1");
 assert(seat.used === 1, "seat was not allocated");
-assert(APP_VERSION === "0.1.1", "version mismatch");
+assert(APP_VERSION === getVersion(), "src/version.ts and version.json differ");
 
 console.log("fixtures ok");

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
 import { TextInput } from "../../components/TextInput";
-import { redactLocal } from "../../../privacy/localRedactor";
+import { previewFor } from "../../../privacy/fence";
 import { runProviderWorkflow, type ProviderWorkflowResult } from "../../../workflows/provider/providerWorkflow";
 import { buildEvidencePackPDF } from "../../../pdf/evidencePack";
 import { evidenceFrom } from "../../../pdf/mapResults";
@@ -38,7 +38,7 @@ export function EvidenceTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(redactLocal(text));
+    setPreview(previewFor(text));
   }
 
   function approve() {

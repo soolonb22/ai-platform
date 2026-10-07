@@ -3,14 +3,14 @@
  * Phase 1 path:
  * input → normalise → localRedactor → previewPayload → workerRedactor → mockAI → output
  *
- * Approval uses simulateUserApproval. The shell will replace that later.
+ * Approval must be passed in as true. Nothing runs without it.
  * mockAI does not see the original text.
  *
- * Export: runPipeline(input: string)
+ * Export: runPipeline(input: string, approved: boolean)
  */
 
 import { redactLocal } from "../privacy/localRedactor";
-import { buildPreview, simulateUserApproval, type PreviewPayload } from "../privacy/previewPayload";
+import { buildPreview, type PreviewPayload } from "../privacy/previewPayload";
 import { redactWorker } from "../privacy/workerRedactor";
 import { PlatformError } from "../utils/errors";
 import { normalise } from "../utils/normalise";
@@ -33,12 +33,12 @@ export function mockAI(redacted: string): string {
 }
 
 /** Run the Phase 1 fence and the mock model call. */
-export function runPipeline(input: string): PipelineOutput {
+export function runPipeline(input: string, approved: boolean): PipelineOutput {
   const cleaned = normalise(input);
   if (!cleaned) throw new PlatformError("EMPTY_INPUT");
 
   const redacted = redactLocal(cleaned);
-  const preview = simulateUserApproval(buildPreview(cleaned, redacted));
+  const preview = { ...buildPreview(cleaned, redacted), approved: approved === true };
   if (!preview.approved) throw new PlatformError("NOT_APPROVED");
 
   const budget = trimToBudget(preview.redacted, MAX_TOKENS);

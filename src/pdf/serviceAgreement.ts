@@ -1,6 +1,6 @@
 /**
  * serviceAgreement.ts
- * Builds a one-page service-agreement PDF with no library.
+ * Builds a service-agreement PDF with no library.
  * Draft only. Not a legal document.
  * Export: buildServiceAgreementPDF(agreement: Agreement): Uint8Array
  */
@@ -38,7 +38,7 @@ function linesFor(agreement: Agreement): string[] {
   ];
 }
 
-/** Return a single-page PDF. Text past 40 lines is left off the page. */
+/** Return a PDF. Long lines wrap and long documents continue on new pages. */
 export function buildServiceAgreementPDF(agreement: Agreement): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(agreement));
 }

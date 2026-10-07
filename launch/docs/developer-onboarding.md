@@ -55,7 +55,9 @@ All user data passes through:
 
 Every workflow begins with these modules. Engines only ever see worker text. The original note is never rendered in a result panel and never logged.
 
-The fence is heuristic. A bare name with no label or honorific can pass. Treat it as a floor, not a guarantee.
+`src/privacy/fence.ts` runs all three in order and is the only entry point workflows use. `src/privacy/vocabulary.ts` holds the NDIS terms the redactor must keep and the everyday capitalised words it must not treat as names.
+
+The fence is heuristic. A name with no title, label, verb, or action word near it can pass. Treat it as a floor, not a guarantee.
 
 ## 4. Intelligence Engines
 
@@ -84,7 +86,7 @@ input -> redactLocal -> buildPreview -> gate on approval
       -> redactWorker -> engines -> logEvent("workflow-run") -> result
 ```
 
-Every runner takes `(input, approved?)`. Pass `false` to stop before the engine. Empty input throws `PlatformError("EMPTY_INPUT")`. The result object always contains `preview` and `workerText` beside the engine output.
+Every runner takes `(input, approved)`. Anything other than `true` stops it before the engine. Empty input throws `PlatformError("EMPTY_INPUT")`. The result object always contains `preview` and `workerText` beside the engine output.
 
 ## 6. Front-End Experience
 
@@ -109,7 +111,7 @@ PDF modules under `src/pdf/` generate local PDFs:
 - `traumaPlan.ts` — trauma plans
 - `schoolCommunication.ts` — school communication
 
-All four call `writePdf(lines)`, which emits a single-page text PDF as a `Uint8Array` with no library. `mapResults.ts` converts a workflow result into the input shape for each generator. All PDFs are generated client-side. Text past 40 lines is left off the page.
+All four call `writePdf(lines)`, which emits a text PDF as a `Uint8Array` with no library. `mapResults.ts` converts a workflow result into the input shape for each generator. All PDFs are generated client-side. Long lines wrap, long documents run onto more pages, and curly quotes and dashes are mapped to plain characters.
 
 ## 8. Deployment Layer
 

@@ -1,6 +1,6 @@
 /**
  * traumaPlan.ts
- * Builds a one-page trauma-plan PDF with no library.
+ * Builds a trauma-plan PDF with no library.
  * Planning hint only. Not a diagnosis.
  * Export: buildTraumaPlanPDF(plan: TraumaPlan): Uint8Array
  */
@@ -38,7 +38,7 @@ function linesFor(plan: TraumaPlan): string[] {
   ];
 }
 
-/** Return a single-page PDF. Text past 40 lines is left off the page. */
+/** Return a PDF. Long lines wrap and long documents continue on new pages. */
 export function buildTraumaPlanPDF(plan: TraumaPlan): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(plan));
 }

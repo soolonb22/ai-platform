@@ -10,8 +10,8 @@
 const EMAIL = String.raw`[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}`;
 const PHONE = String.raw`(?:\+61[\s.-]?|0)\d(?:[\s.-]?\d){8}\b|\(\d{2}\)[\s.-]?\d{4}[\s.-]?\d{4}`;
 
-/** Leftover IDs: labels, UUIDs, card-like groups, long digit runs. */
-const IDENTIFIER = String.raw`(?:\b(?:NDIS|ABN|ACN|TFN|CRN|Medicare|member|participant|plan|customer|account|reference|ref|id|policy)\b(?:\s+(?:number|no|num|id))?\s*[#:]?\s*[A-Z0-9-]{4,}\b|\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b|\b(?:\d{4}[\s-]?){3}\d{4}\b|\b\d{2}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}\b|\b\d{6,12}\b)`;
+/** Leftover IDs: labels, UUIDs, card-like groups, long digit runs. A labeled value must hold a digit. */
+const IDENTIFIER = String.raw`(?:\b(?:NDIS|ABN|ACN|TFN|CRN|Medicare|member|participant|plan|customer|account|reference|ref|id|policy)\b(?:\s+(?:number|no|num|id))?\s*[#:]?\s*[A-Z0-9-]*\d[A-Z0-9-]*\b|\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b|\b(?:\d{4}[\s-]?){3}\d{4}\b|\b\d{2}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}\b|\b\d{6,12}\b)`;
 
 /**
  * Diagnostic and clinical labels. Replaced as a class, not interpreted.
