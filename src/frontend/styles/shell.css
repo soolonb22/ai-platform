@@ -122,3 +122,24 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 .draft-item.active { border-color: #1c1917; }
+
+.plan-chip {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #44403c;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+}

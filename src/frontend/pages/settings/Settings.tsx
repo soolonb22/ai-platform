@@ -1,6 +1,6 @@
 /**
  * Settings.tsx
- * Privacy notes, the demo plan picker, saved drafts, and the version.
+ * The demo plan picker first, then saved drafts, privacy notes, and the version.
  * Everything here is stored on this device only.
  */
 
@@ -20,20 +20,12 @@ export function Settings() {
   return (
     <section className="page">
       <h1>Settings</h1>
-      <section>
-        <h2>Privacy</h2>
-        <p>
-          Text is redacted on this device before any workflow runs, and nothing runs until you approve the preview. The four
-          tools work entirely in this browser.
+      <section className="ai-box">
+        <h2>Plan and AI drafting</h2>
+        <p className="hint">
+          Paid plans add AI drafting. These are demo plans: no payment is taken and no account is created. Your choice is
+          saved on this device.
         </p>
-        <p>
-          Saved drafts keep only the redacted text and results, in this browser. The original note is never stored. AI
-          drafting sends the redacted text to Claude, an AI model by Anthropic, only after you see it and choose Send to AI.
-        </p>
-      </section>
-      <section>
-        <h2>Plan</h2>
-        <p className="hint">Demo plans. No payment is taken and no account is created. Your choice is saved on this device.</p>
         {PLANS.map((item) => (
           <label key={item.id} className="field row">
             <input type="radio" name="plan" checked={plan.id === item.id} onChange={() => setPlan(item.id)} />
@@ -45,7 +37,7 @@ export function Settings() {
           </label>
         ))}
         <p className="hint">
-          AI drafts used today: {aiDraftsUsedToday()} of {plan.aiDraftsPerDay}.
+          Current plan: {plan.label}. AI drafts used today: {aiDraftsUsedToday()} of {plan.aiDraftsPerDay}.
         </p>
       </section>
       <section>
@@ -63,6 +55,17 @@ export function Settings() {
         >
           Delete all drafts
         </button>
+      </section>
+      <section>
+        <h2>Privacy</h2>
+        <p>
+          Text is redacted on this device before any workflow runs, and nothing runs until you approve the preview. The four
+          tools work entirely in this browser.
+        </p>
+        <p>
+          Saved drafts keep only the redacted text and results, in this browser. The original note is never stored. AI
+          drafting sends the redacted text to Claude, an AI model by Anthropic, only after you see it and choose Send to AI.
+        </p>
       </section>
       <section>
         <h2>Workflows</h2>

@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from "react";
 import { requestAiDraft } from "../../ai/client";
-import { aiDraftsLeftToday, getPlan, recordAiDraft } from "../../data/plan";
+import { aiDraftsLeftToday, getPlan, recordAiDraft, setPlan } from "../../data/plan";
 import type { WorkflowKind } from "../../workflows/kinds";
 import { useStoreVersion } from "../state/useStore";
 
@@ -52,7 +52,16 @@ export function AiDraft({ kind, workerText, findings, onDraft }: AiDraftProps) {
     return (
       <section className="ai-box">
         <h2>AI draft</h2>
-        <p className="hint">AI drafting comes with the paid plans. Choose one in Settings to try it. Every tool above stays free.</p>
+        <p className="hint">
+          AI drafting comes with the paid plans. They are demo plans for now, so no payment is taken. Every tool above stays
+          free.
+        </p>
+        <div className="row">
+          <button type="button" className="primary" onClick={() => setPlan("parent")}>
+            Switch to the Parent demo plan
+          </button>
+        </div>
+        <p className="hint">You can change plans any time in Settings.</p>
       </section>
     );
   }

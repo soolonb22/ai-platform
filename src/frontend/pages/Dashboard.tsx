@@ -5,6 +5,8 @@
 
 import { useState } from "react";
 import { Drafts } from "./drafts/Drafts";
+import { getPlan } from "../../data/plan";
+import { useStoreVersion } from "../state/useStore";
 import { EvidenceTool } from "./evidence/EvidenceTool";
 import { NDISDecoder } from "./ndis/NDISDecoder";
 import { SchoolTool } from "./school/SchoolTool";
@@ -24,6 +26,8 @@ const TOOLS: Array<{ id: ToolId; label: string }> = [
 
 export function Dashboard({ initialTool = "trauma" }: { initialTool?: ToolId }) {
   const [tool, setTool] = useState<ToolId>(initialTool);
+  useStoreVersion();
+  const plan = getPlan();
   return (
     <div className="shell">
       <aside className="sidebar">
@@ -40,6 +44,12 @@ export function Dashboard({ initialTool = "trauma" }: { initialTool?: ToolId }) 
             </button>
           ))}
         </nav>
+        <div className="plan-chip">
+          <span>Plan: {plan.label}</span>
+          <button type="button" className="link" onClick={() => setTool("settings")}>
+            Change plan
+          </button>
+        </div>
       </aside>
       <main className="main">
         {tool === "trauma" ? <TraumaTool /> : null}
