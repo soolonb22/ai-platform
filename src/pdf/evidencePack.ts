@@ -17,7 +17,7 @@ export interface EvidencePack {
   recommendations: string[];
 }
 
-import { writePdf } from "./writePdf.ts";
+import { writePdf } from "./writePdf";
 
 function linesFor(evidence: EvidencePack): string[] {
   const items = evidence.items.length
@@ -46,6 +46,6 @@ function linesFor(evidence: EvidencePack): string[] {
 }
 
 /** Return a single-page PDF. Text past 40 lines is left off the page. */
-export function buildEvidencePackPDF(evidence: EvidencePack): Uint8Array {
+export function buildEvidencePackPDF(evidence: EvidencePack): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(evidence));
 }

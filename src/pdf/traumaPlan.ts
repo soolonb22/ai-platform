@@ -13,7 +13,7 @@ export interface TraumaPlan {
   narrative: string;
 }
 
-import { writePdf } from "./writePdf.ts";
+import { writePdf } from "./writePdf";
 
 function linesFor(plan: TraumaPlan): string[] {
   return [
@@ -39,6 +39,6 @@ function linesFor(plan: TraumaPlan): string[] {
 }
 
 /** Return a single-page PDF. Text past 40 lines is left off the page. */
-export function buildTraumaPlanPDF(plan: TraumaPlan): Uint8Array {
+export function buildTraumaPlanPDF(plan: TraumaPlan): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(plan));
 }

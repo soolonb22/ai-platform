@@ -13,7 +13,7 @@ export interface Agreement {
   terms: string[];
 }
 
-import { writePdf } from "./writePdf.ts";
+import { writePdf } from "./writePdf";
 
 function linesFor(agreement: Agreement): string[] {
   return [
@@ -39,6 +39,6 @@ function linesFor(agreement: Agreement): string[] {
 }
 
 /** Return a single-page PDF. Text past 40 lines is left off the page. */
-export function buildServiceAgreementPDF(agreement: Agreement): Uint8Array {
+export function buildServiceAgreementPDF(agreement: Agreement): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(agreement));
 }

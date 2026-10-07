@@ -47,7 +47,7 @@ export function runProviderWorkflow(input: string, approved?: boolean): Provider
   const workerText = redactWorker(gate.redacted);
   const note: RewrittenNote = { source: workerText, text: rewriteProgressNotes(workerText) };
   const mapped = mapBehaviourToNeed(workerText);
-  const needs = mapped.needs.length ? mapped.needs : ["predictability"];
+  const needs: NeedId[] = mapped.needs.length ? mapped.needs : ["predictability"];
   const goals = generateGoals(needs);
   const evidence = buildEvidence(needs, goals);
   logEvent("workflow-run", { workflow: "provider", ok: true });

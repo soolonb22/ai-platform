@@ -46,7 +46,7 @@ export const routes: Record<string, RouteHandler> = {
   },
 };
 
-function pdfBytes(kind: string, payload: unknown): Uint8Array | null {
+function pdfBytes(kind: string, payload: unknown): Uint8Array<ArrayBuffer> | null {
   if (!payload || typeof payload !== "object") return null;
   if (kind === "agreement") return buildServiceAgreementPDF(payload as Agreement);
   if (kind === "evidence") return buildEvidencePackPDF(payload as EvidencePack);

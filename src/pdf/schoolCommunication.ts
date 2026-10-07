@@ -13,7 +13,7 @@ export interface SchoolCommunication {
   staffNote: string;
 }
 
-import { writePdf } from "./writePdf.ts";
+import { writePdf } from "./writePdf";
 
 function linesFor(comm: SchoolCommunication): string[] {
   return [
@@ -39,6 +39,6 @@ function linesFor(comm: SchoolCommunication): string[] {
 }
 
 /** Return a single-page PDF. Text past 40 lines is left off the page. */
-export function buildSchoolCommunicationPDF(comm: SchoolCommunication): Uint8Array {
+export function buildSchoolCommunicationPDF(comm: SchoolCommunication): Uint8Array<ArrayBuffer> {
   return writePdf(linesFor(comm));
 }

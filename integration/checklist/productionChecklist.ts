@@ -15,13 +15,13 @@ const ITEMS: ChecklistItem[] = [
     section: "Privacy compliance",
     item: "Local and worker redaction run before engines",
     status: "partial",
-    note: "Workflows redact first. Approval is still simulated. Bare names can pass.",
+    note: "Workflows redact first. The shell gates on a real Approve click. The API runners still simulate approval. Bare names can pass.",
   },
   {
     section: "Redaction verification",
     item: "Sample notes do not reach the engine unchanged",
     status: "partial",
-    note: "Email, phone, and labeled ids are replaced. Participant can be over-redacted.",
+    note: "Email, phone, labeled ids, dates, addresses, schools, providers, and labeled names are replaced. A bare name with no label can pass.",
   },
   {
     section: "Workflow stability",
@@ -32,14 +32,20 @@ const ITEMS: ChecklistItem[] = [
   {
     section: "PDF generation stability",
     item: "Four generators return a PDF buffer",
-    status: "partial",
-    note: "Headers are valid. Stream length does not match. Shapes differ from workflows.",
+    status: "ready",
+    note: "Headers are valid and /Length matches the stream. Single page, 40 lines max.",
+  },
+  {
+    section: "Type safety",
+    item: "tsc covers every phase",
+    status: "ready",
+    note: "npm run typecheck includes src, deployment, integration, launch, monetization, scale, and tests.",
   },
   {
     section: "Deployment pipeline health",
     item: "Worker, Pages, and Actions files exist",
-    status: "missing",
-    note: "No wrangler.toml, no workflow in .github, and no npm build script.",
+    status: "partial",
+    note: "wrangler.toml, .github/workflows/deploy.yml, and typecheck, test, and build scripts exist. Pages has no binding to the Worker yet.",
   },
   {
     section: "Billing system readiness",
@@ -51,7 +57,7 @@ const ITEMS: ChecklistItem[] = [
     section: "Multi-seat + enterprise readiness",
     item: "Teams, seats, orgs, and audit log exist",
     status: "partial",
-    note: "Seats are not tied to a license. Audit is not called by workflows.",
+    note: "Seats are tied to an active licence. Audit is called by the four workflows. Org analytics are not.",
   },
   {
     section: "Offline mode verification",

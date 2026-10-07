@@ -1,6 +1,6 @@
 /**
  * main.tsx
- * React entry. The vanilla main.ts remains for the old shell.
+ * React entry, mounted by index.html.
  */
 
 import { createRoot } from "react-dom/client";

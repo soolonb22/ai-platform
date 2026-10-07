@@ -7,7 +7,7 @@ function escapePdf(value: string): string {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
-function concat(parts: Uint8Array[]): Uint8Array {
+function concat(parts: Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffer> {
   const size = parts.reduce((sum, part) => sum + part.length, 0);
   const out = new Uint8Array(size);
   let offset = 0;
@@ -18,7 +18,7 @@ function concat(parts: Uint8Array[]): Uint8Array {
   return out;
 }
 
-export function writePdf(lines: string[]): Uint8Array {
+export function writePdf(lines: string[]): Uint8Array<ArrayBuffer> {
   const commands = ["BT", "/F1 11 Tf", "50 760 Td"];
   lines.slice(0, 40).forEach((line, index) => {
     if (index > 0) commands.push("0 -16 Td");
@@ -36,7 +36,7 @@ export function writePdf(lines: string[]): Uint8Array {
   const encoded = new TextEncoder();
   const before = encoded.encode("%PDF-1.4\n");
   const endStream = encoded.encode("\nendstream\nendobj\n");
-  const objWrap = (index: number, body: Uint8Array) =>
+  const objWrap = (index: number, body: Uint8Array<ArrayBuffer>) =>
     concat([encoded.encode(`${index} 0 obj\n`), body, encoded.encode("\nendobj\n")]);
   const parts = [before];
   const offsets = [0];
