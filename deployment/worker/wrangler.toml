@@ -1,0 +1,8 @@
+name = "ai-platform"
+main = "deployment/worker/index.ts"
+compatibility_date = "2026-10-06"
+
+[vars]
+AI_MODE = "mock"
+MAX_TOKENS = "400"
+ENVIRONMENT = "dev"

@@ -1,0 +1,8 @@
+{
+  "version": "0.1.1",
+  "frontend": "src/frontend",
+  "worker": "deployment/worker/index.ts",
+  "versionFile": "deployment/build/version.json",
+  "envSchema": "deployment/env/env.schema.json",
+  "notes": "Version 0.1.1\n\n- Phase 9 check"
+}

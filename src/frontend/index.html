@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fence</title>
+    <link rel="stylesheet" href="./styles/shell.css" />
+  </head>
+  <body>
+    <div id="app">
+      <p id="boot">Fence is loading. If this text remains, the app script did not run.</p>
+    </div>
+    <script>
+      window.addEventListener("error", function (event) {
+        var boot = document.getElementById("boot");
+        if (boot) boot.textContent = "Script error: " + (event.message || "unknown");
+      });
+    </script>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/api/*", "/redact", "/ai", "/pdf"],
+  "exclude": ["/", "/assets/*", "/index.html", "/settings", "/trauma", "/ndis", "/school", "/evidence"]
+}

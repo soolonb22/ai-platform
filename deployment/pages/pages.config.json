@@ -1,0 +1,11 @@
+{
+  "build": {
+    "command": "npm run build",
+    "output": "dist"
+  },
+  "environment": {
+    "AI_MODE": "mock",
+    "MAX_TOKENS": "400",
+    "ENVIRONMENT": "pages"
+  }
+}
