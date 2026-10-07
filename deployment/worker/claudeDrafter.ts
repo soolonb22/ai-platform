@@ -40,8 +40,16 @@ export const claudeDrafter: Drafter = async ({ apiKey, model, system, prompt }) 
     }
     return { ok: true, text };
   } catch (error) {
-    if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) {
-      return { ok: false, status: 503, error: "The AI key for this site is not working. The site owner needs to check it." };
+    // Status code and error type only. Never the request text or the key.
+    if (error instanceof Anthropic.APIError) console.log(`claude-api ${error.status} ${error.name}`);
+    if (error instanceof Anthropic.AuthenticationError) {
+      return { ok: false, status: 503, error: "The AI key for this site was rejected. The site owner needs to replace it." };
+    }
+    if (error instanceof Anthropic.PermissionDeniedError) {
+      return { ok: false, status: 503, error: "The AI key for this site does not have access to this model. The site owner needs to check it." };
+    }
+    if (error instanceof Anthropic.NotFoundError) {
+      return { ok: false, status: 503, error: "The AI model set for this site was not found. The site owner needs to check AI_MODEL." };
     }
     if (error instanceof Anthropic.RateLimitError) {
       return { ok: false, status: 429, error: "The AI service is busy. Try again in a minute." };
