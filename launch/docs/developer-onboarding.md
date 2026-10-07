@@ -205,6 +205,8 @@ CI runs the same three on every push to `main`.
 
 - **Drafts** live in `src/data/drafts.ts` and use browser storage through `src/data/store.ts`. `saveDraft` removes the original note before anything is written.
 - **AI drafting** starts in `src/frontend/components/AiDraft.tsx`. It shows exactly what will leave the device, then `src/ai/client.ts` posts to `/api/ai`. `functions/api/ai.ts` hands the request to `deployment/worker/aiHandler.ts`, which checks the origin, size, and kill switch, runs the worker redaction pass again, and calls Claude through `claudeDrafter.ts`. Prompts are in `aiPrompts.ts`.
+- **People** live in `src/data/people.ts`. `src/data/tracking.ts` links tool runs to the chosen person: `withActivePersonNames` hides their names with `src/privacy/knownNames.ts`, and `recordForActivePerson` adds an observation. `src/data/observations.ts` summarises patterns over time.
+- **Documents** are defined in `src/ai/documents.ts` (kinds, safety notes, JSON schema). `src/ai/documentClient.ts` builds the redacted request. `functions/api/document.ts` hands it to `deployment/worker/documentHandler.ts`, which asks Claude for schema-shaped JSON with prompts from `documentPrompts.ts`. `src/pdf/aiDocument.ts` makes the PDF.
 - **Plans** are defined in `src/access/plans.ts` and chosen in Settings. They gate AI drafts per day and the number of saved drafts. They run in the browser and are not payment.
 
 Welcome to the system. You're extending an OS, not just writing code.

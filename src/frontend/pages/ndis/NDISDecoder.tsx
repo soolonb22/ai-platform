@@ -9,6 +9,8 @@ import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
 import { ToolActions } from "../../components/ToolActions";
+import { PersonPicker } from "../../components/PersonPicker";
+import { recordForActivePerson, withActivePersonNames } from "../../../data/tracking";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runNDISWorkflow, type NDISWorkflowResult } from "../../../workflows/ndis/ndisWorkflow";
@@ -38,12 +40,14 @@ export function NDISDecoder() {
       setError("No input to process.");
       return;
     }
-    setPreview(previewFor(text));
+    setPreview(previewFor(withActivePersonNames(text)));
   }
 
   function approve() {
     try {
-      setResult(runNDISWorkflow(text, true));
+      const next = runNDISWorkflow(withActivePersonNames(text), true);
+      setResult(next);
+      recordForActivePerson("ndis", next);
       setPreview("");
     } catch (caught) {
       setResult(null);
@@ -55,6 +59,7 @@ export function NDISDecoder() {
   return (
     <section className="page">
       <h1>NDIS Decoder</h1>
+      <PersonPicker />
       <FileUpload caption="Plan file" onFile={onFile} />
       {fileNote ? <p className="hint">{fileNote}</p> : null}
       <TextInput caption="Plan text" value={text} onChange={setText} />

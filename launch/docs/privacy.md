@@ -16,6 +16,12 @@ AI drafting is optional and is not part of the Free plan. Before anything is sen
 
 The server at `/api/ai` refuses requests from other sites, runs the worker redaction pass again, and never logs the text. The draft is written by Claude, an AI model by Anthropic.
 
+## People, patterns, and documents
+
+Profiles, pattern history, and documents are saved in this browser only. A person's name and nicknames never leave the device: they are swapped for [name] before the tool preview, in the pattern history, and in every document request. A document request contains the redacted profile fields, pattern counts without dates, and recent redacted notes. It is shown in full before anything is sent, and the server redacts every field again. Deleting a person deletes their history and documents too.
+
+A behaviour support plan from this app is a draft for discussion. It never suggests restrictive practices, and any plan that involves one must come from a registered NDIS behaviour support practitioner.
+
 ## Saved drafts
 
 Drafts live in this browser's local storage. They keep the redacted text, the results, and any AI draft. The original note is removed before saving. Delete drafts one at a time on the Drafts page, or all at once in Settings.

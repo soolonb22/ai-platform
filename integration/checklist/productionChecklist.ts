@@ -54,6 +54,12 @@ const ITEMS: ChecklistItem[] = [
     note: "Origin check, size limits, kill switch, and server re-redaction are in place. Needs AI_API_KEY. No per-user limit on the server yet.",
   },
   {
+    section: "People and documents",
+    item: "Profiles, pattern tracking, and AI documents from both",
+    status: "partial",
+    note: "Names never leave the device and every field is redacted twice. Documents are drafts to check. Stored in one browser only, with no sync or backup.",
+  },
+  {
     section: "Saved drafts",
     item: "Drafts kept in the browser without the original note",
     status: "ready",

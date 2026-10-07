@@ -9,6 +9,8 @@ import { useState } from "react";
 import { FileUpload } from "../../components/FileUpload";
 import { PreviewModal } from "../../components/PreviewModal";
 import { ToolActions } from "../../components/ToolActions";
+import { PersonPicker } from "../../components/PersonPicker";
+import { recordForActivePerson, withActivePersonNames } from "../../../data/tracking";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runProviderWorkflow, type ProviderWorkflowResult } from "../../../workflows/provider/providerWorkflow";
@@ -38,12 +40,14 @@ export function EvidenceTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(previewFor(text));
+    setPreview(previewFor(withActivePersonNames(text)));
   }
 
   function approve() {
     try {
-      setResult(runProviderWorkflow(text, true));
+      const next = runProviderWorkflow(withActivePersonNames(text), true);
+      setResult(next);
+      recordForActivePerson("provider", next);
       setPreview("");
     } catch (caught) {
       setResult(null);
@@ -55,6 +59,7 @@ export function EvidenceTool() {
   return (
     <section className="page">
       <h1>Evidence Tools</h1>
+      <PersonPicker />
       <FileUpload caption="Provider note file" onFile={onFile} />
       {fileNote ? <p className="hint">{fileNote}</p> : null}
       <TextInput caption="Provider notes" value={text} onChange={setText} placeholder="Paste the progress note." />

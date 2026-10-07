@@ -1,41 +1,49 @@
 /**
  * claudeDrafter.ts
- * The real model call behind AI drafting, through the official Anthropic SDK.
- * Defaults to Claude Opus 5.5 at medium effort, with the server-side refusal fallback switched on,
+ * The real model calls, through the official Anthropic SDK.
+ * Claude Opus 5.5 at medium effort, with the server-side refusal fallback switched on,
  * so a declined request is retried on a fallback model inside the same call.
- * Errors map to fixed, plain messages. Nothing from the request is logged.
+ * claudeWriter can also ask for JSON that follows a schema (structured outputs).
+ * Errors map to fixed, plain messages. Only the status code and error type are logged.
  *
- * Export: claudeDrafter
+ * Exports: claudeWriter, claudeDrafter, Writer
  */
 
 import Anthropic from "@anthropic-ai/sdk";
-import type { Drafter } from "./aiHandler";
+import type { Drafter, DraftOutcome } from "./aiHandler";
 
-/** Room for adaptive thinking plus a draft of under 250 words. */
-const MAX_TOKENS = 4096;
+export type Writer = (input: {
+  apiKey: string;
+  model: string;
+  system: string;
+  prompt: string;
+  maxTokens: number;
+  schema?: Record<string, unknown>;
+}) => Promise<DraftOutcome>;
 
-export const claudeDrafter: Drafter = async ({ apiKey, model, system, prompt }) => {
-  const client = new Anthropic({ apiKey, maxRetries: 1, timeout: 60_000 });
+export const claudeWriter: Writer = async ({ apiKey, model, system, prompt, maxTokens, schema }) => {
+  const client = new Anthropic({ apiKey, maxRetries: 1, timeout: 170_000 });
   try {
     const response = await client.beta.messages.create({
       model,
-      max_tokens: MAX_TOKENS,
+      max_tokens: maxTokens,
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
-      output_config: { effort: "medium" },
+      output_config: schema ? { effort: "medium", format: { type: "json_schema", schema } } : { effort: "medium" },
       system,
       messages: [{ role: "user", content: prompt }],
     });
 
     if (response.stop_reason === "refusal") {
-      return { ok: false, status: 422, error: "The AI declined to draft this one. Try rewording the note." };
+      return { ok: false, status: 422, error: "The AI declined to write this one. Try rewording the notes." };
     }
     const text = response.content
       .flatMap((block) => (block.type === "text" ? [block.text] : []))
       .join("\n")
       .trim();
-    if (!text) return { ok: false, status: 502, error: "The AI returned an empty draft. Try again." };
+    if (!text) return { ok: false, status: 502, error: "The AI returned nothing. Try again." };
     if (response.stop_reason === "max_tokens") {
+      if (schema) return { ok: false, status: 502, error: "The document ran too long to finish. Try again." };
       return { ok: true, text: `${text}\n\n(The draft was cut short. Try a shorter note.)` };
     }
     return { ok: true, text };
@@ -55,7 +63,7 @@ export const claudeDrafter: Drafter = async ({ apiKey, model, system, prompt }) 
       return { ok: false, status: 429, error: "The AI service is busy. Try again in a minute." };
     }
     if (error instanceof Anthropic.BadRequestError) {
-      return { ok: false, status: 502, error: "The AI service could not read this request. Try a shorter note." };
+      return { ok: false, status: 502, error: "The AI service could not read this request. Try shorter notes." };
     }
     if (error instanceof Anthropic.APIError) {
       return { ok: false, status: 502, error: "The AI service did not answer. Try again." };
@@ -63,3 +71,6 @@ export const claudeDrafter: Drafter = async ({ apiKey, model, system, prompt }) 
     return { ok: false, status: 502, error: "Could not reach the AI service. Try again." };
   }
 };
+
+/** Short plain-text drafts: room for adaptive thinking plus under 250 words. */
+export const claudeDrafter: Drafter = (input) => claudeWriter({ ...input, maxTokens: 4096 });

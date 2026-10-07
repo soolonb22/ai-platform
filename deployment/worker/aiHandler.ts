@@ -29,11 +29,11 @@ export type DraftOutcome = { ok: true; text: string } | { ok: false; status: num
 /** Calls the model. Swapped for a fake in tests. */
 export type Drafter = (input: { apiKey: string; model: string; system: string; prompt: string }) => Promise<DraftOutcome>;
 
-function reply(status: number, body: Record<string, unknown>): Response {
+export function reply(status: number, body: Record<string, unknown>): Response {
   return Response.json(body, { status, headers: { "cache-control": "no-store" } });
 }
 
-function originAllowed(request: Request, env: AiEnv): boolean {
+export function originAllowed(request: Request, env: AiEnv): boolean {
   const origin = request.headers.get("origin");
   if (!origin) return false;
   if (origin === new URL(request.url).origin) return true;

@@ -43,4 +43,4 @@ npm run build      # static build into dist/
 
 ## Status
 
-Version 0.3.0. Every workflow refuses to run until the redacted preview is approved. Drafts save in the browser without the original note. AI drafting with Claude is optional, needs a confirmed second preview, and is switched on by setting the `AI_API_KEY` secret on the Pages project. Plans are a demo gate in the browser; billing is a mock ledger. See `integration/checklist/productionChecklist.ts` for the readiness list.
+Version 0.4.0. The People page holds a profile for each person, tracks the patterns from tool runs linked to them, and asks Claude for full documents: a draft behaviour support plan, a draft service agreement, a one-page profile, and a draft school support plan. Every workflow refuses to run until the redacted preview is approved. Drafts save in the browser without the original note. AI drafting with Claude is optional, needs a confirmed second preview, and is switched on by setting the `AI_API_KEY` secret on the Pages project. Plans are a demo gate in the browser; billing is a mock ledger. See `integration/checklist/productionChecklist.ts` for the readiness list.

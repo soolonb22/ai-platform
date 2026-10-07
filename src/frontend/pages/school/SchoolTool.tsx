@@ -7,6 +7,8 @@
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
 import { ToolActions } from "../../components/ToolActions";
+import { PersonPicker } from "../../components/PersonPicker";
+import { recordForActivePerson, withActivePersonNames } from "../../../data/tracking";
 import { TextInput } from "../../components/TextInput";
 import { previewFor } from "../../../privacy/fence";
 import { runSchoolWorkflow, type SchoolWorkflowResult } from "../../../workflows/school/schoolWorkflow";
@@ -26,12 +28,14 @@ export function SchoolTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(previewFor(text));
+    setPreview(previewFor(withActivePersonNames(text)));
   }
 
   function approve() {
     try {
-      setResult(runSchoolWorkflow(text, true));
+      const next = runSchoolWorkflow(withActivePersonNames(text), true);
+      setResult(next);
+      recordForActivePerson("school", next);
       setPreview("");
     } catch (caught) {
       setResult(null);
@@ -43,6 +47,7 @@ export function SchoolTool() {
   return (
     <section className="page">
       <h1>School Tools</h1>
+      <PersonPicker />
       <TextInput caption="Behaviour description" value={text} onChange={setText} placeholder="Describe what happened in class." />
       <button type="button" className="primary" onClick={run}>
         Run School Workflow

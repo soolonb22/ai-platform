@@ -7,6 +7,8 @@
 import { useState } from "react";
 import { PreviewModal } from "../../components/PreviewModal";
 import { ToolActions } from "../../components/ToolActions";
+import { PersonPicker } from "../../components/PersonPicker";
+import { recordForActivePerson, withActivePersonNames } from "../../../data/tracking";
 import { previewFor } from "../../../privacy/fence";
 import { runTraumaWorkflow, type TraumaWorkflowResult } from "../../../workflows/trauma/traumaWorkflow";
 
@@ -25,12 +27,14 @@ export function TraumaTool() {
       setError("No input to process.");
       return;
     }
-    setPreview(previewFor(text));
+    setPreview(previewFor(withActivePersonNames(text)));
   }
 
   function approve() {
     try {
-      setResult(runTraumaWorkflow(text, true));
+      const next = runTraumaWorkflow(withActivePersonNames(text), true);
+      setResult(next);
+      recordForActivePerson("trauma", next);
       setPreview("");
     } catch (caught) {
       setResult(null);
@@ -42,6 +46,7 @@ export function TraumaTool() {
   return (
     <section className="page">
       <h1>Trauma Tool</h1>
+      <PersonPicker />
       <div className="field">
         <span className="field-label">Behaviour description</span>
         <textarea

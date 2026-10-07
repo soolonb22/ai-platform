@@ -3,4 +3,4 @@
  * Same value as deployment/build/version.json. Safe to import in the browser.
  */
 
-export const APP_VERSION = "0.3.0";
+export const APP_VERSION = "0.4.0";

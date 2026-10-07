@@ -2,12 +2,12 @@
   "name": "ai-platform",
   "private": true,
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc -p tsconfig.json",
     "build": "vite build",
-    "test": "tsx tests/fixtures.ts && tsx tests/regression.ts && tsx tests/features.ts"
+    "test": "tsx tests/fixtures.ts && tsx tests/regression.ts && tsx tests/features.ts && tsx tests/people.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

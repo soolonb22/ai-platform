@@ -1,6 +1,6 @@
 # Release strategy
 
-This build is `0.3.0`. Billing is mock. Every workflow requires explicit approval of the redacted preview. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
+This build is `0.4.0`. Billing is mock. Every workflow requires explicit approval of the redacted preview. A push to `main` runs typecheck, build, and test, then deploys once the Cloudflare secrets exist.
 
 ## Pre-launch checklist
 
